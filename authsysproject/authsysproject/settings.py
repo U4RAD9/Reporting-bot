@@ -79,25 +79,26 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'authsysproject.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'DB1',
-#         'USER': 'postgres',
-#         'PASSWORD': 'aman@1229',
-#         'HOST': 'localhost'
-#     }
-# }
+#Database
+#https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'sqlite.db',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'botdb',
+        'USER': 'u4rad',
+        'PASSWORD': 'Aman@1229',
+        'HOST': 'localhost',
+        'PORT': '5433'
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'sqlite.db',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
