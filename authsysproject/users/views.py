@@ -90,6 +90,7 @@ import fitz
 import pandas as pd
 from twilio.rest import Client as tw
 import re
+from django.utils.timezone import now
 
 def login(request):
     if request.method == 'POST':
@@ -619,8 +620,12 @@ def ecgallocation(request):
     current_user_personal_info = PersonalInfoModel.objects.get(user=request.user)
     total_reported = current_user_personal_info.total_reported
 
-    allocated_to_current_user = PatientDetails.objects.filter(cardiologist=current_user_personal_info).order_by(
-        '-TestDate')
+    # Get the current date and the date one day before
+    today = now().date()
+    yesterday = today - timedelta(days=1)
+
+    allocated_to_current_user = PatientDetails.objects.filter(cardiologist=current_user_personal_info).filter(
+        Q(isDone=False) | Q(isDone=True, study_date__in=[today, yesterday])).order_by('-TestDate')
 
     unique_dates = set()
     for patient in allocated_to_current_user:
@@ -641,7 +646,12 @@ def xrayallocation(request):
     # Fetch the corresponding PersonalInfo instance for the current user
     current_user_personal_info = PersonalInfoModel.objects.get(user=request.user)
     total_reported = current_user_personal_info.total_reported
-    allocated_to_current_user = DICOMData.objects.filter(radiologist=current_user_personal_info).order_by('-study_date')
+    # Get the current date
+    today = now().date()
+    yesterday = today - timedelta(days=1)
+    allocated_to_current_user = DICOMData.objects.filter(radiologist=current_user_personal_info).filter(
+        Q(isDone=False) | Q(isDone=True, study_date__in=[today, yesterday])
+    ).order_by('-study_date')
     location = XLocation.objects.all()
     unique_dates = set()
     for patient in allocated_to_current_user:
